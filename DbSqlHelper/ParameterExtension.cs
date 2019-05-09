@@ -9,30 +9,28 @@ namespace DbSqlHelper
 {
     public static class ParameterExtension
     {
-        #region Parameter
-        public static void AddParams(this DbCommand cmd, params object[] parameters)
+        public static void AddParams(this IDbCommand cmd, params object[] parameters)
         {
             foreach (var item in parameters)
                 AddParam(cmd, item);
         }
 
-        public static void AddParam(this DbCommand cmd, string key, object item)
+        public static void AddParam(this IDbCommand cmd, string key, object item)
         {
             var p = cmd.CreateParameter();
             p.ParameterName = key;
             AddParam(cmd, item, p);
         }
 
-        public static void AddParam(this DbCommand cmd, object item)
+        public static void AddParam(this IDbCommand cmd, object item)
         {
             var p = cmd.CreateParameter();
             p.ParameterName = string.Format("p{0}", cmd.Parameters.Count);
             AddParam(cmd, item, p);
         }
-        #endregion
 
         #region Private
-        private static void AddParam(DbCommand cmd, object item, IDbDataParameter p)
+        private static void AddParam(IDbCommand cmd, object item, IDbDataParameter p)
         {
             if (item == null)
             {

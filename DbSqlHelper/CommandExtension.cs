@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Data;
 using System.Data.Common;
 
 namespace DbSqlHelper
 {
     public static class CommandExtension
     {
-        public static DbCommand CreateCommand(this DbConnection cnn, string sql, params object[] parameters)
+        public static IDbCommand CreateCommand(this IDbConnection cnn, string sql, params object[] parameters)
         {
             var command = cnn.CreateCommand();
             command.CommandText = sql;

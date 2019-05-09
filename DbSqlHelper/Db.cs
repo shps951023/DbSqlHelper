@@ -10,7 +10,7 @@ namespace DbSqlHelper
 {
     public static class Db
     {
-        private static readonly ConcurrentDictionary<string, Func<DbConnection>> _connectionCache = new ConcurrentDictionary<string, Func<DbConnection>>();
+        private static readonly ConcurrentDictionary<string, Func<IDbConnection>> _connectionCache = new ConcurrentDictionary<string, Func<IDbConnection>>();
 
         public static string AddConnection<TDbType>(string connectionString) => "".AddConnection(typeof(TDbType), connectionString);
 
@@ -21,17 +21,17 @@ namespace DbSqlHelper
             var type = dbType;
             var constructor = type.GetConstructor(new[] { typeof(string) });
             var @new = Expression.New(constructor, Expression.Constant(connectionString));
-            var cast = Expression.TypeAs(@new, typeof(DbConnection));
-            var func = Expression.Lambda<Func<DbConnection>>(cast).Compile();
+            var cast = Expression.TypeAs(@new, typeof(IDbConnection));
+            var func = Expression.Lambda<Func<IDbConnection>>(cast).Compile();
 
             _connectionCache[key] = func;
 
             return key;
         }
 
-        public static DbConnection GetConnection(bool autoOpen = true) => "".GetConnection(autoOpen);
+        public static IDbConnection GetConnection(bool autoOpen = true) => "".GetConnection(autoOpen);
 
-        public static DbConnection GetConnection(this string key, bool autoOpen = true)
+        public static IDbConnection GetConnection(this string key, bool autoOpen = true)
         {
             var func = _connectionCache[key];
             var connection = func();
