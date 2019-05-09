@@ -5,6 +5,14 @@ VisualStudioVersion = 15.0.28307.421
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbSqlHelper", "DbSqlHelper\DbSqlHelper.csproj", "{AEBAB99C-355D-484C-9EB0-D1C1BB8EA963}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbSqlHelperTest", "DbSqlHelperTest\DbSqlHelperTest.csproj", "{1549124C-24A8-4E6F-8D67-310650DCC42C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution items", "Solution items", "{B01D5EE1-FD1A-49DB-846A-5EBE5C893E8A}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		Readme.md = Readme.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +23,10 @@ Global
 		{AEBAB99C-355D-484C-9EB0-D1C1BB8EA963}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AEBAB99C-355D-484C-9EB0-D1C1BB8EA963}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AEBAB99C-355D-484C-9EB0-D1C1BB8EA963}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1549124C-24A8-4E6F-8D67-310650DCC42C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1549124C-24A8-4E6F-8D67-310650DCC42C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1549124C-24A8-4E6F-8D67-310650DCC42C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1549124C-24A8-4E6F-8D67-310650DCC42C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
