@@ -24,6 +24,16 @@ namespace DbSqlHelperTest
         }
 
         [Fact]
+        public void GetDbConnectionType()
+        {
+            using (var cn = Db.GetConnection())
+            {
+                var result = cn.GetDbConnectionType();
+                Assert.Equal(DBConnectionType.SqlServer, result);
+            }
+        }
+
+        [Fact]
         public void ExecuteTest()
         {
             var sql = @"

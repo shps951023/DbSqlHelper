@@ -22,5 +22,8 @@
     <PackageReleaseNotes></PackageReleaseNotes>
     <PackageLicenseUrl>http://www.apache.org/licenses/LICENSE-2.0</PackageLicenseUrl>
   </PropertyGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.3' OR '$(TargetFramework)' == 'netstandard2.0'">
+    <PackageReference Include="System.Data.Common" Version="4.3.0" />
 
+  </ItemGroup>
 </Project>
