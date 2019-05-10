@@ -2,6 +2,10 @@
 ![](https://img.shields.io/nuget/dt/DbSqlHelper.svg)
 
 ---
+### Online Demo
+- [DbSqlHelper Demo : Easy Add/Get Connection ](https://dotnetfiddle.net/VcDt2Y)
+
+---
 ### Installation
 
 You can install the package [from NuGet](https://www.nuget.org/packages/DbSqlHelper) using the Visual Studio Package Manager or NuGet UI:
