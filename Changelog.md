@@ -1,6 +1,3 @@
-[![NuGet](https://img.shields.io/nuget/v/DbSqlHelper.svg)](https://www.nuget.org/packages/DbSqlHelper)
-![](https://img.shields.io/nuget/dt/DbSqlHelper.svg)
-
 
 #### Easy Add/Get Connection 
 - Just AddConnection One Time Then You Can Get AnyWhere

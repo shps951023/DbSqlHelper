@@ -8,8 +8,8 @@ namespace DbSqlHelperTest
     {
         static SqlTest()
         {
-            var cs = @"Data Source=(localdb)\MSSQLLocalDB;Integrated Security=SSPI;Initial Catalog=master;";
-            Db.AddConnection<System.Data.SqlClient.SqlConnection>(cs);
+            var connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Integrated Security=SSPI;Initial Catalog=master;";
+            Db.AddConnection<System.Data.SqlClient.SqlConnection>(connectionString);
         }
 
         [Fact]
