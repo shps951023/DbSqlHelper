@@ -1,6 +1,24 @@
 [![NuGet](https://img.shields.io/nuget/v/DbSqlHelper.svg)](https://www.nuget.org/packages/DbSqlHelper)
 ![](https://img.shields.io/nuget/dt/DbSqlHelper.svg)
 
+---
+### Installation
+
+You can install the package [from NuGet](https://www.nuget.org/packages/DbSqlHelper) using the Visual Studio Package Manager or NuGet UI:
+
+```cmd
+PM> install-package DbSqlHelper
+```
+
+or `dotnet` command line:
+
+```cmd
+dotnet add package DbSqlHelper
+```
+
+---
+
+## Get Start
 
 #### Easy Add/Get Connection 
 - Just AddConnection One Time Then You Can Get AnyWhere
@@ -48,7 +66,7 @@ using (var cn = "OracleDb".GetConnection())
 }
 {
     "OracleDb".AddConnection<Oracle.ManagedDataAccess.Client.OracleConnection>(connectionString);
-    var dbType = "SqlServerDb".GetConnection().GetDbConnectionType();
+    var dbType = "OracleDb".GetConnection().GetDbConnectionType();
     Assert.Equal(DBConnectionType.Oracle, result);
 }
 ```
