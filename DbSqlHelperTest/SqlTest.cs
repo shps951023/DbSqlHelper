@@ -24,6 +24,18 @@ namespace DbSqlHelperTest
         }
 
         [Fact]
+        public void StringSql_Execute()
+        {
+            "create table #T (ID int,Name nvarchar(20))".SqlExecute();
+
+            var count = @"create table #T (ID int,Name nvarchar(20))
+            insert into #T (ID,Name) values (1,@p0),(2,@p1);
+            ".SqlExecute("Github","Microsoft");
+
+            Assert.Equal(2, count);
+        }
+
+        [Fact]
         public void GetDbConnectionType()
         {
             using (var cn = Db.GetConnection())

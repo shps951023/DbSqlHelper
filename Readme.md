@@ -24,7 +24,7 @@ dotnet add package DbSqlHelper
 
 ## Get Start
 
-#### Easy Add/Get Connection 
+#### Easy Add/Get Connection (Default Connection)
 - Just AddConnection One Time Then You Can Get AnyWhere
 - Default Auto Open Connection
 ```C#
@@ -58,6 +58,20 @@ using (var cn = "OracleDb".GetConnection())
 {
     //Sql Query..
 }
+```
+
+### Easy Sql Execute (Use Default Connection)
+
+1. SqlExecute
+```C#
+"create table #T (ID int,Name nvarchar(20))".SqlExecute();
+```
+
+2. with index parameter 
+```C#
+@"create table #T (ID int,Name nvarchar(20))
+insert into #T (ID,Name) values (1,@p0),(2,@p1);
+".SqlExecute("Github","Microsoft");
 ```
 
 #### GetDbType
