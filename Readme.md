@@ -2,6 +2,14 @@
 ![](https://img.shields.io/nuget/dt/DbSqlHelper.svg)
 
 ---
+### Features
+
+1. You can use DbSqlHelper with other package kibrary like Dapper
+2. Just addConnection one time then you can get it any where,and it support mutiple connection type.
+3. The simplest way to SQL Execute
+4. Native SQL Extension
+
+---
 ### Online Demo
 - [DbSqlHelper Demo : Easy Add/Get Connection ](https://dotnetfiddle.net/VcDt2Y)
 - [DbSqlHelper Demo : Easy Execute SQL](https://dotnetfiddle.net/YWuQGb)
