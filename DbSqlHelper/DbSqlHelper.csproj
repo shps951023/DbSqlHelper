@@ -26,4 +26,8 @@
 - [X] Add Db.AddConnection and GetConnection</PackageReleaseNotes>
     <PackageLicenseUrl>http://www.apache.org/licenses/LICENSE-2.0</PackageLicenseUrl>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ValueGetter" Version="1.0.4" />
+  </ItemGroup>
 </Project>

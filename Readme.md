@@ -34,6 +34,20 @@ dotnet add package DbSqlHelper
 
 ## Get Start
 
+### Easy Sql Execute (Use Default Connection)
+
+1. SqlExecute
+```C#
+"create table #T (ID int,Name nvarchar(20))".SqlExecute();
+```
+
+2. SqlExecute with parameters 
+```C#
+@"create table #T (ID int,Name nvarchar(20))
+insert into #T (ID,Name) values (1,@p0),(2,@p1);
+".SqlExecute("Github","Microsoft");
+```
+
 #### Easy Add/Get Connection (Default Connection)
 - Just AddConnection One Time Then You Can Get AnyWhere
 - Default Auto Open Connection
@@ -41,16 +55,6 @@ dotnet add package DbSqlHelper
 var connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Integrated Security=SSPI;Initial Catalog=master;";
 Db.AddConnection<System.Data.SqlClient.SqlConnection>(connectionString);
 using (var cn = Db.GetConnection()) 
-{
-    //Sql Query..
-}
-```
-
-#### Support Mutiple RDBMS Connection
-e.g : oracle
-```C#
-Db.AddConnection<Oracle.ManagedDataAccess.Client.OracleConnection>(connectionString);
-using (var cn = Db.GetConnection())
 {
     //Sql Query..
 }
@@ -70,26 +74,59 @@ using (var cn = "OracleDb".GetConnection())
 }
 ```
 
-### Easy Sql Execute (Use Default Connection)
-
-1. SqlExecute
-```C#
-"create table #T (ID int,Name nvarchar(20))".SqlExecute();
-```
-
-2. with index parameter 
-```C#
-@"create table #T (ID int,Name nvarchar(20))
-insert into #T (ID,Name) values (1,@p0),(2,@p1);
-".SqlExecute("Github","Microsoft");
-```
-
 #### GetDbConnectionType
 
 ```C#
 var result = Db.GetConnection().GetDbConnectionType();
 Assert.Equal(DBConnectionType.SqlServer, result);
 ```
+
+----
+
+### Extension
+
+#### ParameterExtension
+1.Builder Style    
+```C#
+using (var cn = Db.GetConnection())
+using (var cmd = cn.CreateCommand())
+{
+    cmd.CommandText = "select @val1 + @val2";
+    cmd.AddParam("val1", 5).AddParam("val2", 10);
+    var result = cmd.ExecuteScalar();
+    Assert.Equal(15, result);
+}
+```
+
+2.EF SqlQuery Index Parameter Style (@p0,@p1...)  
+> this is faster than Dapper Style because it doesn't use Reflection
+```C#
+using (var cn = Db.GetConnection())
+using (var cmd = cn.CreateCommand())
+{
+    cmd.Parameters.Clear();
+    cmd.CommandText = "select @p0 + @p1";
+    cmd.AddParams(5,10);
+    var result = cmd.ExecuteScalar();
+    Assert.Equal(15, result);
+}
+```
+
+3.Dapper Style
+```C#
+using (var cn = Db.GetConnection())
+using (var cmd = cn.CreateCommand())
+{
+    cmd.CommandText = "select @val1 + @val2";
+    cmd.AddParams(new { val1 = 1, val2 = 2 });
+    var result = cmd.ExecuteScalar();
+    Assert.Equal(3, result);
+}
+```
+
+
+
+
 
 <!--
 #### Command Extension
