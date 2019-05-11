@@ -1,6 +1,5 @@
-using System;
-using Xunit;
 using DbSqlHelper;
+using Xunit;
 
 namespace DbSqlHelperTest
 {
@@ -13,14 +12,30 @@ namespace DbSqlHelperTest
         }
 
         [Fact]
+        public void ConnectionType()
+        {
+            var result = Db.GetConnection().GetDbConnectionType();
+            Assert.Equal(DBConnectionType.SqlServer, result);
+        }
+
+        [Fact]
         public void CommandTest()
         {
             using (var cn = Db.GetConnection())
-            using (var command = cn.CreateCommand("select @p0 + @p1",1,2))
+            using (var command = cn.CreateCommand("select @p0 + @p1", 1, 2))
             {
                 var result = command.ExecuteScalar();
                 Assert.Equal(3, result);
             }
+
+            using (var cn = Db.GetConnection())
+            using (var transation = cn.BeginTransaction())
+            using (var command = cn.CreateCommand("select @p0 + @p1", transation, 1, 2))
+            {
+                var result = command.ExecuteScalar();
+                Assert.Equal(3, result);
+            }
+
         }
 
         [Fact]
@@ -30,7 +45,7 @@ namespace DbSqlHelperTest
 
             var count = @"create table #T (ID int,Name nvarchar(20))
             insert into #T (ID,Name) values (1,@p0),(2,@p1);
-            ".SqlExecute("Github","Microsoft");
+            ".SqlExecute("Github", "Microsoft");
 
             Assert.Equal(2, count);
         }

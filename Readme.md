@@ -4,15 +4,16 @@
 ---
 ### Features
 
-1. You can use DbSqlHelper with other package kibrary like Dapper
+1. DbSqlHelper with other package library like Dapper
 2. Just addConnection one time then you can get it any where,and it support mutiple connection type.
 3. The simplest way to SQL Execute
-4. Native SQL Extension
 
 ---
 ### Online Demo
 - [DbSqlHelper Demo : Easy Add/Get Connection ](https://dotnetfiddle.net/VcDt2Y)
 - [DbSqlHelper Demo : Easy Execute SQL](https://dotnetfiddle.net/YWuQGb)
+- [DbSqlHelper Demo : GetDbConnectionType](https://dotnetfiddle.net/1ida8T)
+
 
 ---
 ### Installation
@@ -83,21 +84,14 @@ insert into #T (ID,Name) values (1,@p0),(2,@p1);
 ".SqlExecute("Github","Microsoft");
 ```
 
-#### GetDbType
+#### GetDbConnectionType
 
 ```C#
-{
-    "SqlServerDb".AddConnection<System.Data.SqlClient.SqlConnection>(connectionString);
-    var dbType = "SqlServerDb".GetConnection().GetDbConnectionType();
-    Assert.Equal(DBConnectionType.SqlServer, result);
-}
-{
-    "OracleDb".AddConnection<Oracle.ManagedDataAccess.Client.OracleConnection>(connectionString);
-    var dbType = "OracleDb".GetConnection().GetDbConnectionType();
-    Assert.Equal(DBConnectionType.Oracle, result);
-}
+var result = Db.GetConnection().GetDbConnectionType();
+Assert.Equal(DBConnectionType.SqlServer, result);
 ```
 
+<!--
 #### Command Extension
 ```C#
 using (var cn = Db.GetConnection())
@@ -124,3 +118,4 @@ using (var cn = Db.GetConnection())
     Assert.Equal(2, result);
 }
 ```
+-->
