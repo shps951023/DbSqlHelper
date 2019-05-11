@@ -4,6 +4,7 @@
 ---
 ### Online Demo
 - [DbSqlHelper Demo : Easy Add/Get Connection ](https://dotnetfiddle.net/VcDt2Y)
+- [DbSqlHelper Demo : Easy Execute SQL](https://dotnetfiddle.net/YWuQGb)
 
 ---
 ### Installation
