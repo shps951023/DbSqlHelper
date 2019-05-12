@@ -16,9 +16,11 @@ namespace DbSqlHelper
 
         public static string AddConnection<TDbType>(this string key, string connectionString) => key.AddConnection(typeof(TDbType), connectionString);
 
-        public static string AddConnection(this string key, Type dbType, string connectionString)
+        public static string AddConnection(Type connectionType,string connectionString) => "".AddConnection(connectionType, connectionString);
+
+        public static string AddConnection(this string key, Type connectionType, string connectionString)
         {
-            var type = dbType;
+            var type = connectionType;
             var constructor = type.GetConstructor(new[] { typeof(string) });
             var @new = Expression.New(constructor, Expression.Constant(connectionString));
             var cast = Expression.TypeAs(@new, typeof(IDbConnection));

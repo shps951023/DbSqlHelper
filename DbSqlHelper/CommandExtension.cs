@@ -10,6 +10,7 @@ namespace DbSqlHelper
         {
             var command = cnn.CreateCommand();
             command.CommandText = sql;
+            command.CommandTimeout = DbSqlHelperSetting.DefaultCommandTimeout;
             if (parameters.Length > 0)
                 command.AddParams(parameters);
             return command;
