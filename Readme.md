@@ -41,14 +41,7 @@ dotnet add package DbSqlHelper
 "create table #T (ID int,Name nvarchar(20))".SqlExecute();
 ```
 
-2. SqlExecute with strong type parameters 
-```C#
-@"create table #T (ID int,Name nvarchar(20))
-    insert into #T (ID,Name) values (1,@Name1),(2,@Name2);
-".SqlExecute(new { Name1 = "Github", Name2= "Microsoft" });
-```
-
-3. SqlExecute with Index parameters (EF SqlQuery Parameter Style)
+2. SqlExecute with Index parameters (EF SqlQuery Parameter Style)
 ```C#
 @"create table #T (ID int,Name nvarchar(20))
 insert into #T (ID,Name) values (1,@p0),(2,@p1);
