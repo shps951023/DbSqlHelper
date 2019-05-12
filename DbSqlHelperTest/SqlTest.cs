@@ -1,5 +1,8 @@
 using DbSqlHelper;
 using Xunit;
+using Dapper;
+using System.Data.SqlClient;
+using System.Data;
 
 namespace DbSqlHelperTest
 {
@@ -8,7 +11,18 @@ namespace DbSqlHelperTest
         static SqlTest()
         {
             var connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Integrated Security=SSPI;Initial Catalog=master;";
-            Db.AddConnection<System.Data.SqlClient.SqlConnection>(connectionString);
+            Db.AddConnection<SqlConnection>(connectionString);
+            Db.AddConnection(typeof(SqlConnection),connectionString);
+        }
+
+        [Fact]
+        public void Dappr_and_DbSqlHelper()
+        {
+            using (var cn = Db.GetConnection())
+            {
+                var result = cn.QueryFirst<int>("select 1");
+                Assert.Equal(1, result);
+            }
         }
 
         [Fact]
@@ -19,13 +33,27 @@ namespace DbSqlHelperTest
         }
 
         [Fact]
-        public void CommandTest()
+        public void CommandExtension()
         {
             using (var cn = Db.GetConnection())
             using (var command = cn.CreateCommand("select @p0 + @p1", 1, 2))
             {
                 var result = command.ExecuteScalar();
                 Assert.Equal(3, result);
+            }
+
+            using (var cn = Db.GetConnection())
+            using (var command = cn.CreateCommand("select @p0", 1))
+            {
+                var result = command.ExecuteScalar();
+                Assert.Equal(1, result);
+            }
+
+            using (var cn = Db.GetConnection())
+            using (var command = cn.CreateCommand("select @val1 + @val2", new { val1=5,val2=10 }))
+            {
+                var result = command.ExecuteScalar();
+                Assert.Equal(15, result);
             }
 
             using (var cn = Db.GetConnection())
@@ -43,11 +71,32 @@ namespace DbSqlHelperTest
         {
             "create table #T (ID int,Name nvarchar(20))".SqlExecute();
 
-            var count = @"create table #T (ID int,Name nvarchar(20))
-            insert into #T (ID,Name) values (1,@p0),(2,@p1);
-            ".SqlExecute("Github", "Microsoft");
+            {
+                var count = @"create table #T (ID int,Name nvarchar(20))
+                    insert into #T (ID,Name) values (1,@p0),(2,@p1);
+                ".SqlExecute("Github", "Microsoft");
+                Assert.Equal(2, count);
+            }
+            {
+                var count = @"create table #T (ID int,Name nvarchar(20))
+                    insert into #T (ID,Name) values (1,@Name1),(2,@Name2);
+                ".SqlExecute(new { Name1 = "Github", Name2= "Microsoft" });
+                Assert.Equal(2, count);
+            }
 
-            Assert.Equal(2, count);
+            {
+                var count = @"create table #T (ID int,Name nvarchar(20))
+                    insert into #T (ID,Name) values (1,@Name1),(2,@Name2);
+                ".SqlExecute(CommandType.Text,new { Name1 = "Github", Name2 = "Microsoft" });
+                Assert.Equal(2, count);
+            }
+
+            {
+                var count = @"create table #T (ID int,Name nvarchar(20))
+                    insert into #T (ID,Name) values (1,@Name1),(2,@Name2);
+                ".SqlExecute(CommandType.Text,15, new { Name1 = "Github", Name2 = "Microsoft" });
+                Assert.Equal(2, count);
+            }
         }
 
         [Fact]
