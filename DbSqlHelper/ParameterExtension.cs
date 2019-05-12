@@ -53,27 +53,14 @@ namespace DbSqlHelper
             if (item == null)
             {
                 p.Value = DBNull.Value;
+                cmd.Parameters.Add(p);
+                return;
             }
-            else
-            {
-                if (item.GetType() == typeof(Guid))
-                {
-                    p.Value = item.ToString();
-                    p.DbType = DbType.String;
-                    p.Size = 4000;
-                }
-                else if (item.GetType() == typeof(System.Dynamic.ExpandoObject))
-                {
-                    var d = (IDictionary<string, object>)item;
-                    p.Value = d.Values.FirstOrDefault();
-                }
-                else
-                {
-                    p.Value = item;
-                }
-                if (item.GetType() == typeof(string))
-                    p.Size = 4000;
-            }
+            
+            if (item is string)
+                p.Size = 4000;
+
+            p.Value = item;
             cmd.Parameters.Add(p);
         }
         #endregion
