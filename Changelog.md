@@ -1,6 +1,5 @@
 #### Version 0.9.4
 - [X] Add ParameterExtension Dapper Style AddParams
-- [X] Add SqlExecute with strong type parameters
 - [X] Support AddConnection(Type connectionType,string connectionString) 
 - [X] Add Editable DefaultCommandTimeout
 

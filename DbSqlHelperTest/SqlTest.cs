@@ -16,7 +16,7 @@ namespace DbSqlHelperTest
         }
 
         [Fact]
-        public void Dappr_and_DbSqlHelper()
+        public void Dapper_and_DbSqlHelper()
         {
             using (var cn = Db.GetConnection())
             {
@@ -42,27 +42,27 @@ namespace DbSqlHelperTest
                 Assert.Equal(3, result);
             }
 
-            using (var cn = Db.GetConnection())
-            using (var command = cn.CreateCommand("select @p0", 1))
-            {
-                var result = command.ExecuteScalar();
-                Assert.Equal(1, result);
-            }
+            //using (var cn = Db.GetConnection())
+            //using (var command = cn.CreateCommand("select @p0", 1))
+            //{
+            //    var result = command.ExecuteScalar();
+            //    Assert.Equal(1, result);
+            //}
 
-            using (var cn = Db.GetConnection())
-            using (var command = cn.CreateCommand("select @val1 + @val2", new { val1=5,val2=10 }))
-            {
-                var result = command.ExecuteScalar();
-                Assert.Equal(15, result);
-            }
+            //using (var cn = Db.GetConnection())
+            //using (var command = cn.CreateCommand("select @val1 + @val2", new { val1=5,val2=10 }))
+            //{
+            //    var result = command.ExecuteScalar();
+            //    Assert.Equal(15, result);
+            //}
 
-            using (var cn = Db.GetConnection())
-            using (var transation = cn.BeginTransaction())
-            using (var command = cn.CreateCommand("select @p0 + @p1", transation, 1, 2))
-            {
-                var result = command.ExecuteScalar();
-                Assert.Equal(3, result);
-            }
+            //using (var cn = Db.GetConnection())
+            //using (var transation = cn.BeginTransaction())
+            //using (var command = cn.CreateCommand("select @p0 + @p1", transation, 1, 2))
+            //{
+            //    var result = command.ExecuteScalar();
+            //    Assert.Equal(3, result);
+            //}
 
         }
 
@@ -77,26 +77,27 @@ namespace DbSqlHelperTest
                 ".SqlExecute("Github", "Microsoft");
                 Assert.Equal(2, count);
             }
-            {
-                var count = @"create table #T (ID int,Name nvarchar(20))
-                    insert into #T (ID,Name) values (1,@Name1),(2,@Name2);
-                ".SqlExecute(new { Name1 = "Github", Name2= "Microsoft" });
-                Assert.Equal(2, count);
-            }
 
-            {
-                var count = @"create table #T (ID int,Name nvarchar(20))
-                    insert into #T (ID,Name) values (1,@Name1),(2,@Name2);
-                ".SqlExecute(CommandType.Text,new { Name1 = "Github", Name2 = "Microsoft" });
-                Assert.Equal(2, count);
-            }
+            //{
+            //    var count = @"create table #T (ID int,Name nvarchar(20))
+            //        insert into #T (ID,Name) values (1,@Name1),(2,@Name2);
+            //    ".SqlExecute(new { Name1 = "Github", Name2= "Microsoft" });
+            //    Assert.Equal(2, count);
+            //}
 
-            {
-                var count = @"create table #T (ID int,Name nvarchar(20))
-                    insert into #T (ID,Name) values (1,@Name1),(2,@Name2);
-                ".SqlExecute(CommandType.Text,15, new { Name1 = "Github", Name2 = "Microsoft" });
-                Assert.Equal(2, count);
-            }
+            //{
+            //    var count = @"create table #T (ID int,Name nvarchar(20))
+            //        insert into #T (ID,Name) values (1,@Name1),(2,@Name2);
+            //    ".SqlExecute(CommandType.Text,new { Name1 = "Github", Name2 = "Microsoft" });
+            //    Assert.Equal(2, count);
+            //}
+
+            //{
+            //    var count = @"create table #T (ID int,Name nvarchar(20))
+            //        insert into #T (ID,Name) values (1,@Name1),(2,@Name2);
+            //    ".SqlExecute(CommandType.Text,15, new { Name1 = "Github", Name2 = "Microsoft" });
+            //    Assert.Equal(2, count);
+            //}
         }
 
         [Fact]
