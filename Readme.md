@@ -127,7 +127,6 @@ using (var cmd = cn.CreateCommand())
 using (var cn = Db.GetConnection())
 using (var cmd = cn.CreateCommand())
 {
-    cmd.Parameters.Clear();
     cmd.CommandText = "select @p0 + @p1";
     cmd.AddParams(5,10);
     var result = cmd.ExecuteScalar();
@@ -147,8 +146,8 @@ using (var cmd = cn.CreateCommand())
 }
 ```
 
-### Used With Other Package
-1. Dapper
+### PS
+1. Used With Dapper
 ```C#
 using (var cn = Db.GetConnection())
 {
