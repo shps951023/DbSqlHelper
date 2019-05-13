@@ -4,9 +4,10 @@
 ---
 ### Features
 
-1. DbSqlHelper can be used with other third-party package like Dapper
+1. DbSqlHelper can be used with other third-party package like Dapper easily
 2. Just addConnection one time then you can get it any where,and it support mutiple connection type.
 3. The simplest way to SQL Execute
+4. Support mutiple RDBMS (SqlServer,Oracle,MySQL..)
 
 ---
 ### Online Demo
@@ -43,18 +44,17 @@ dotnet add package DbSqlHelper
 
 2. SqlExecute with Index parameters (EF SqlQuery Parameter Style)
 ```C#
-@"create table #T (ID int,Name nvarchar(20))
-insert into #T (ID,Name) values (1,@p0),(2,@p1);
+@"  create table #T (ID int,Name nvarchar(20))
+    insert into #T (ID,Name) values (1,@p0),(2,@p1);
 ".SqlExecute("Github","Microsoft");
 ```
 
 #### Easy Add/Get Connection (Default Connection)
-- Just AddConnection One Time Then You Can Get AnyWhere
+- Just AddConnection One Time Then You Can Get Any Where
 - Default Auto Open Connection
 ```C#
 var connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Integrated Security=SSPI;Initial Catalog=master;";
-Db.AddConnection<SqlConnection>(connectionString);
-// or Db.AddConnection(typeof(SqlConnection),connectionString);
+Db.AddConnection<SqlConnection>(connectionString); // or Db.AddConnection(typeof(SqlConnection),connectionString);
 using (var cn = Db.GetConnection()) 
 {
     //Sql Query..
@@ -135,6 +135,7 @@ using (var cmd = cn.CreateCommand())
 ```
 
 3.Dapper Style
+> it use valuegetter properties cache 
 ```C#
 using (var cn = Db.GetConnection())
 using (var cmd = cn.CreateCommand())
@@ -146,8 +147,8 @@ using (var cmd = cn.CreateCommand())
 }
 ```
 
-### PS
-1. Used With Dapper
+### Example
+DbSqlHelper and Dapper
 ```C#
 using (var cn = Db.GetConnection())
 {
