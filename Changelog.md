@@ -1,3 +1,7 @@
+#### Version 0.9.5
+- [X] Add CreateParameter 
+- [X] Sql Format For Oracle,MySQL,SqlServer,PGSQL
+
 #### Version 0.9.4
 - [X] Add ParameterExtension Dapper Style AddParams
 - [X] Support AddConnection(Type connectionType,string connectionString) 

@@ -8,9 +8,15 @@ using System.Text;
 
 namespace DbSqlHelper
 {
-    public static class Db
+    internal class DbModel
     {
-        private static readonly ConcurrentDictionary<string, Func<IDbConnection>> _connectionCache = new ConcurrentDictionary<string, Func<IDbConnection>>();
+        public Func<IDbConnection> ConnectionFunc { get; set; }
+        public Func<IDbDataParameter> ParameterFunc { get; set; }
+    }
+
+    public static partial class Db
+    {
+        private static readonly ConcurrentDictionary<string, DbModel> _ConnectionCache = new ConcurrentDictionary<string, DbModel>();
 
         public static string AddConnection<TDbType>(string connectionString) => "".AddConnection(typeof(TDbType), connectionString);
 
@@ -20,13 +26,35 @@ namespace DbSqlHelper
 
         public static string AddConnection(this string key, Type connectionType, string connectionString)
         {
-            var type = connectionType;
-            var constructor = type.GetConstructor(new[] { typeof(string) });
-            var @new = Expression.New(constructor, Expression.Constant(connectionString));
-            var cast = Expression.TypeAs(@new, typeof(IDbConnection));
-            var func = Expression.Lambda<Func<IDbConnection>>(cast).Compile();
+            var model = new DbModel();
+            _ConnectionCache[key] = model;
+            //Connection Cache
+            {
+                var type = connectionType;
+                var constructor = type.GetConstructor(new[] { typeof(string) });
+                var @new = Expression.New(constructor, Expression.Constant(connectionString));
+                var cast = Expression.TypeAs(@new, typeof(IDbConnection));
+                var func = Expression.Lambda<Func<IDbConnection>>(cast).Compile();
 
-            _connectionCache[key] = func;
+                model.ConnectionFunc = func;
+            }
+
+            //Parameter Cache
+            {
+                using (var cn = key.GetConnection())
+                using (var cmd = cn.CreateCommand())
+                {
+                    var parameter = cmd.CreateParameter();
+                    var parameterType = parameter.GetType();
+
+                    var type = parameterType;
+                    var @new = Expression.New(type);
+                    var cast = Expression.TypeAs(@new, typeof(IDbDataParameter));
+                    var func = Expression.Lambda<Func<IDbDataParameter>>(cast).Compile();
+
+                    model.ParameterFunc = func;
+                }
+            }
 
             return key;
         }
@@ -35,7 +63,7 @@ namespace DbSqlHelper
 
         public static IDbConnection GetConnection(this string key, bool autoOpen = true)
         {
-            var func = _connectionCache[key];
+            var func = _ConnectionCache[key].ConnectionFunc;
             var connection = func();
 
             if (autoOpen)
@@ -44,6 +72,21 @@ namespace DbSqlHelper
                 if (wasClosed) connection.Open();
             }
             return connection;
+        }
+    }
+
+    //Parameter
+    public static partial class Db
+    {
+        public static IDbDataParameter CreateParameter(string name, object value)
+            => "".CreateParameter(name, value);
+
+        public static IDbDataParameter CreateParameter(this string key, string name, object value)
+        {
+            var parameter = _ConnectionCache[key].ParameterFunc();
+            parameter.ParameterName = name;
+            parameter.Value = value;
+            return parameter;
         }
     }
 }
