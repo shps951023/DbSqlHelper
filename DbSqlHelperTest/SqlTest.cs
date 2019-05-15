@@ -5,6 +5,7 @@ using System.Data;
 
 namespace DbSqlHelperTest
 {
+
     public class SqlTest : BaseTest
     {
         [Fact]

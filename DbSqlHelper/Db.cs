@@ -149,11 +149,32 @@ namespace DbSqlHelper
     //String Format
     public static partial class Db
     {
-        //public static string SqlFormat(this string key,string sql)
-        //{
-        //    var cache =  key.GetDbCache();
-        //    sql = Regex.Replace(sql,"")
-        //    return "";
-        //}
+        /// <summary>
+        /// {0} = ParameterPrefix , {1} = QuotePrefix , {2} = QuoteSuffix , 
+        /// e.g
+        /// 1. <code>"SqlServerDb".SqlFormat("select * from {1}orders{2} where id = {0}id")</code> equals <code>select * from [orders] where id = @id</code>
+        /// 2. <code>"OracleDb".SqlFormat("select * from {1}orders{2} where id = {0}id")</code> equals <code>select * from "orders" where id = :id</code>
+        /// </summary>
+        /// <param name="key">DataBase Cache Key</param>
+        /// <param name="sql">Format Sql</param>
+        public static string SqlFormat(string sql) => "".SqlFormat(sql);
+
+        /// <summary>
+        /// {0} = ParameterPrefix , {1} = QuotePrefix , {2} = QuoteSuffix , 
+        /// e.g
+        /// 1. <code>"SqlServerDb".SqlFormat("select * from {1}orders{2} where id = {0}id")</code> equals <code>select * from [orders] where id = @id</code>
+        /// 2. <code>"OracleDb".SqlFormat("select * from {1}orders{2} where id = {0}id")</code> equals <code>select * from "orders" where id = :id</code>
+        /// </summary>
+        /// <param name="key">DataBase Cache Key</param>
+        /// <param name="sql">Format Sql</param>
+        public static string SqlFormat(this string key, string sql)
+        {
+            var cache = key.GetDbCache();
+            sql = sql.Replace("{0}", cache.ParameterPrefix)
+                .Replace("{1}", cache.QuotePrefix)
+                .Replace("{2}", cache.QuoteSuffix)
+                ;
+            return sql;
+        }
     }
 }
