@@ -1,20 +1,12 @@
 using DbSqlHelper;
 using Xunit;
 using Dapper;
-using System.Data.SqlClient;
 using System.Data;
 
 namespace DbSqlHelperTest
 {
-    public class SqlTest
+    public class SqlTest : BaseTest
     {
-        static SqlTest()
-        {
-            var connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Integrated Security=SSPI;Initial Catalog=master;";
-            Db.AddConnection<SqlConnection>(connectionString);
-            Db.AddConnection(typeof(SqlConnection),connectionString);
-        }
-
         [Fact]
         public void Dapper_and_DbSqlHelper()
         {
@@ -134,20 +126,10 @@ namespace DbSqlHelperTest
                 {
                     cmd.Parameters.Clear();
                     cmd.CommandText = "select @p0 + @p1";
-                    cmd.AddParams(5,10);
+                    cmd.AddParams(5, 10);
                     var result = cmd.ExecuteScalar();
                     Assert.Equal(15, result);
                 }
-            }
-        }
-
-        [Fact]
-        public void GetDbConnectionType()
-        {
-            using (var cn = Db.GetConnection())
-            {
-                var result = cn.GetDbConnectionType();
-                Assert.Equal(DBConnectionType.SqlServer, result);
             }
         }
 

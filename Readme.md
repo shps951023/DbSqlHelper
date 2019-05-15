@@ -79,6 +79,16 @@ var result = Db.GetConnection().GetDbConnectionType();
 Assert.Equal(DBConnectionType.SqlServer, result);
 ```
 
+#### GetDbConnection Cache Model(Get Connection ParameterPrefix,QuotePrefix,QuoteSuffix)
+```C#
+var cache = Db.GetDbCache(); //or "".GetDbCache();
+Assert.Equal(DBConnectionType.SqlServer, cache.DBConnectionType);
+Assert.Equal("@", cache.ParameterPrefix);
+Assert.Equal("[", cache.QuotePrefix);
+Assert.Equal("]", cache.QuoteSuffix);
+```
+
+
 ----
 
 ### Extension

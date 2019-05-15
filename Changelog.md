@@ -1,3 +1,8 @@
+#### Version 0.9.5
+- [X] Add DbCache Model for ParameterPrefix,QuotePrefix,QuoteSuffix
+- [X] Add Common Connection CreateParameter Without DbCommand
+- [X] Add `public static DBConnectionType GetDbConnectionType(this Type connectionType)`
+
 #### Version 0.9.4
 - [X] Add ParameterExtension Dapper Style AddParams
 - [X] Support AddConnection(Type connectionType,string connectionString) 
