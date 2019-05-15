@@ -73,11 +73,14 @@ using (var oracleCn = "OracleDb".GetConnection())
 }
 ```
 
-#### GetDbConnectionType
-
+#### SQL Format For ParameterPrefix,QuotePrefix,QuoteSuffix
 ```C#
-var result = Db.GetConnection().GetDbConnectionType();
-Assert.Equal(DBConnectionType.SqlServer, result);
+var sql = Db.SqlFormat("select * from {1}orders{2} where id = {0}id");
+//if db is sqlserver
+Assert.Equal("select * from [orders] where id = @id", sql); 
+
+//if db is oracle
+Assert.Equal("select * from \"orders\" where id = :id", sql); 
 ```
 
 #### GetDbConnection Cache Model(Get Connection ParameterPrefix,QuotePrefix,QuoteSuffix)
@@ -89,6 +92,12 @@ Assert.Equal("[", cache.QuotePrefix);
 Assert.Equal("]", cache.QuoteSuffix);
 ```
 
+#### GetDbConnectionType
+
+```C#
+var result = Db.GetConnection().GetDbConnectionType();
+Assert.Equal(DBConnectionType.SqlServer, result);
+```
 
 ----
 

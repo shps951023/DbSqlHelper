@@ -8,10 +8,18 @@ namespace DbSqlHelperTest
         [Fact]
         public void SqlFormatTest()
         {
-            using (var cn = Db.GetConnection())
             {
-                var result = Db.SqlFormat("select * from {1}orders{2} where id = {0}id");
-                Assert.Equal("select * from [orders] where id = @id", result);
+                var sql = Db.SqlFormat("select * from {1}orders{2} where id = {0}id");
+                //if db is sqlserver
+                Assert.Equal("select * from [orders] where id = @id", sql);
+
+                //if db is oracle
+                //Assert.Equal("select * from "orders" where id = :id", sql); 
+            }
+
+            {
+                var sql = "sqlserver".SqlFormat("select * from {1}orders{2} where id = {0}id");
+                Assert.Equal("select * from [orders] where id = @id", sql);
             }
         }
     }

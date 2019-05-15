@@ -1,5 +1,13 @@
 #### Version 0.9.6
-- [X] Add SqlFormat,e.g:`"SqlServerDb".SqlFormat("select * from {1}orders{2} where id = {0}id")` equals `select * from [orders] where id = @id`
+- [X] Add SqlFormat , e.g:
+```C#
+var sql = Db.SqlFormat("select * from {1}orders{2} where id = {0}id");
+//if db is sqlserver
+Assert.Equal("select * from [orders] where id = @id", sql);
+
+//if db is oracle
+Assert.Equal("select * from \"orders\" where id = :id", sql); 
+```
 
 #### Version 0.9.5
 - [X] Add DbCache Model for ParameterPrefix,QuotePrefix,QuoteSuffix
