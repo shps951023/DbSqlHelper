@@ -1,3 +1,6 @@
+#### Version 0.9.6
+- [X] Add SqlFormat,e.g:`"SqlServerDb".SqlFormat("select * from {1}orders{2} where id = {0}id")` equals `select * from [orders] where id = @id`
+
 #### Version 0.9.5
 - [X] Add DbCache Model for ParameterPrefix,QuotePrefix,QuoteSuffix
 - [X] Add Common Connection CreateParameter Without DbCommand
