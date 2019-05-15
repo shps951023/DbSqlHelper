@@ -8,6 +8,7 @@
 2. Just addConnection one time then you can get it any where,and it support mutiple connection type.
 3. The simplest way to SQL Execute
 4. Support mutiple RDBMS (SqlServer,Oracle,MySQL..)
+5. Support `net40;net45;net451;net46;netstandard2.0;` framework
 
 ---
 ### Online Demo
