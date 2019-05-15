@@ -5,7 +5,6 @@ using System.Data;
 
 namespace DbSqlHelperTest
 {
-
     public class SqlTest : BaseTest
     {
         [Fact]
@@ -131,16 +130,6 @@ namespace DbSqlHelperTest
                     var result = cmd.ExecuteScalar();
                     Assert.Equal(15, result);
                 }
-            }
-        }
-
-        [Fact]
-        public void GetDbConnectionType()
-        {
-            using (var cn = Db.GetConnection())
-            {
-                var result = cn.GetDbConnectionType();
-                Assert.Equal(DBConnectionType.SqlServer, result);
             }
         }
 

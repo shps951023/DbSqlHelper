@@ -20,6 +20,13 @@ namespace DbSqlHelper
                    ["mysqlconnection"] = DBConnectionType.MySql,
                    ["fbconnection"] = DBConnectionType.Firebird
                };
+
+        public static DBConnectionType GetDbConnectionType(this Type connectionType)
+        {
+            var name = connectionType.Name.ToLower();
+            return !AdapterDictionary.ContainsKey(name) ? DefaultAdapter : AdapterDictionary[name];
+        }
+
         public static DBConnectionType GetDbConnectionType(this IDbConnection connection)
         {
             var name = connection.GetType().Name.ToLower();

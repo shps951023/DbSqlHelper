@@ -1,6 +1,8 @@
 #### Version 0.9.5
-- [X] Add CreateParameter 
+- [X] Add Common Connection CreateParameter Without DbCommand
 - [X] Sql Format For Oracle,MySQL,SqlServer,PGSQL
+- [X] Add `public static DBConnectionType GetDbConnectionType(this Type connectionType)`
+- [X] Add DbCache Model for ParameterPrefix,QuotePrefix,QuoteSuffix
 
 #### Version 0.9.4
 - [X] Add ParameterExtension Dapper Style AddParams

@@ -1,33 +1,45 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Data;
-using System.Data.Common;
 using System.Linq.Expressions;
-using System.Text;
 
 namespace DbSqlHelper
 {
-    internal class DbModel
+    public class DbCache
     {
-        public Func<IDbConnection> ConnectionFunc { get; set; }
-        public Func<IDbDataParameter> ParameterFunc { get; set; }
+        internal Func<IDbConnection> ConnectionFunc { get; set; }
+        internal Func<IDbDataParameter> ParameterFunc { get; set; }
+        public string ParameterPrefix { get; set; } = "@";
+        public string QuotePrefix { get; set; } = "";
+        public string QuoteSuffix { get; set; } = "";
+        public DBConnectionType DBConnectionType { get; set; } = DBConnectionType.Unknown;
     }
 
+    //Open Api
     public static partial class Db
     {
-        private static readonly ConcurrentDictionary<string, DbModel> _ConnectionCache = new ConcurrentDictionary<string, DbModel>();
+        private static readonly ConcurrentDictionary<string, DbCache> _DbCache = new ConcurrentDictionary<string, DbCache>();
 
-        public static string AddConnection<TDbType>(string connectionString) => "".AddConnection(typeof(TDbType), connectionString);
+        #region Open Api
+        public static string AddConnection<TDbType>(string connectionString) => "".AddConnectionImpl(typeof(TDbType), connectionString);
 
-        public static string AddConnection<TDbType>(this string key, string connectionString) => key.AddConnection(typeof(TDbType), connectionString);
+        public static string AddConnection<TDbType>(this string key, string connectionString) => key.AddConnectionImpl(typeof(TDbType), connectionString);
 
-        public static string AddConnection(Type connectionType,string connectionString) => "".AddConnection(connectionType, connectionString);
+        public static string AddConnection(Type connectionType, string connectionString) => "".AddConnectionImpl(connectionType, connectionString);
 
-        public static string AddConnection(this string key, Type connectionType, string connectionString)
+        public static string AddConnection(this string key, Type connectionType, string connectionString) => key.AddConnectionImpl(connectionType, connectionString);
+
+        public static IDbConnection GetConnection(bool autoOpen = true) => "".GetConnectionImpl(autoOpen);
+
+        public static IDbConnection GetConnection(this string key, bool autoOpen = true) => key.GetConnectionImpl(autoOpen);
+        #endregion
+
+        #region Impl
+        private static string AddConnectionImpl(this string key, Type connectionType, string connectionString)
         {
-            var model = new DbModel();
-            _ConnectionCache[key] = model;
+            var model = new DbCache();
+            _DbCache[key] = model;
+
             //Connection Cache
             {
                 var type = connectionType;
@@ -39,10 +51,11 @@ namespace DbSqlHelper
                 model.ConnectionFunc = func;
             }
 
-            //Parameter Cache
+
+            using (var cn = key.GetConnection())
+            using (var cmd = cn.CreateCommand())
             {
-                using (var cn = key.GetConnection())
-                using (var cmd = cn.CreateCommand())
+                //Parameter Cache
                 {
                     var parameter = cmd.CreateParameter();
                     var parameterType = parameter.GetType();
@@ -54,16 +67,54 @@ namespace DbSqlHelper
 
                     model.ParameterFunc = func;
                 }
+
+                //DbConnectionType
+                model.DBConnectionType = cn.GetDbConnectionType();
+
+                //ParameterPrefix QuotePrefix QuoteSuffix
+                switch (cn.GetDbConnectionType())
+                {
+                    case DBConnectionType.SqlCeServer:
+                    case DBConnectionType.SqlServer:
+                    case DBConnectionType.SQLite:
+                        model.ParameterPrefix = "@";
+                        model.QuotePrefix = "[";
+                        model.QuoteSuffix = "]";
+                        break;
+                    case DBConnectionType.MySql:
+                        model.ParameterPrefix = "@";
+                        model.QuotePrefix = "`";
+                        model.QuoteSuffix = "`";
+                        break;
+                    case DBConnectionType.Firebird:
+                        model.ParameterPrefix = "?";
+                        model.QuotePrefix = "\"";
+                        model.QuoteSuffix = "\"";
+                        break;
+                    case DBConnectionType.Postgres:
+                        model.ParameterPrefix = "@";
+                        model.QuotePrefix = "\"";
+                        model.QuoteSuffix = "\"";
+                        break;
+                    case DBConnectionType.Oracle:
+                        model.ParameterPrefix = ":";
+                        model.QuotePrefix = "\"";
+                        model.QuoteSuffix = "\"";
+                        break;
+                    default:
+                        model.ParameterPrefix = "@";
+                        model.QuotePrefix = "";
+                        model.QuoteSuffix = "";
+                        break;
+                }
             }
 
             return key;
         }
 
-        public static IDbConnection GetConnection(bool autoOpen = true) => "".GetConnection(autoOpen);
-
-        public static IDbConnection GetConnection(this string key, bool autoOpen = true)
+        private static IDbConnection GetConnectionImpl(this string key, bool autoOpen)
         {
-            var func = _ConnectionCache[key].ConnectionFunc;
+            var func = _DbCache[key].ConnectionFunc;
             var connection = func();
 
             if (autoOpen)
@@ -73,6 +124,11 @@ namespace DbSqlHelper
             }
             return connection;
         }
+        #endregion
+
+        public static DbCache GetDbCache(this string key) => _DbCache[key];
+
+        public static DbCache GetDbCache() => _DbCache[""];
     }
 
     //Parameter
@@ -83,10 +139,21 @@ namespace DbSqlHelper
 
         public static IDbDataParameter CreateParameter(this string key, string name, object value)
         {
-            var parameter = _ConnectionCache[key].ParameterFunc();
+            var parameter = _DbCache[key].ParameterFunc();
             parameter.ParameterName = name;
             parameter.Value = value;
             return parameter;
         }
+    }
+
+    //String Format
+    public static partial class Db
+    {
+        //public static string SqlFormat(this string key,string sql)
+        //{
+        //    var cache =  key.GetDbCache();
+        //    sql = Regex.Replace(sql,"")
+        //    return "";
+        //}
     }
 }
