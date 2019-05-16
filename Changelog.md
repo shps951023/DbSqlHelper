@@ -1,3 +1,6 @@
+#### Version 0.9.7
+- [X] Add `ContainsKey` method to determines whether the connection cache contains the specified key.
+
 #### Version 0.9.6
 - [X] Add SqlFormat , e.g:
 ```C#

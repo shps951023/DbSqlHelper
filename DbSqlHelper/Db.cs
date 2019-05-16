@@ -21,6 +21,11 @@ namespace DbSqlHelper
         private static readonly ConcurrentDictionary<string, DbCache> _DbCache = new ConcurrentDictionary<string, DbCache>();
 
         #region Open Api
+        /// <summary>
+        /// Determines whether the connection cache contains the specified key.
+        /// </summary>
+        public static bool ContainsKey(this string key) => _DbCache.ContainsKey(key);
+
         public static string AddConnection<TDbType>(string connectionString) => "".AddConnectionImpl(typeof(TDbType), connectionString);
 
         public static string AddConnection<TDbType>(this string key, string connectionString) => key.AddConnectionImpl(typeof(TDbType), connectionString);

@@ -14,5 +14,19 @@ namespace DbSqlHelperTest
             Assert.Equal("[", cache.QuotePrefix);
             Assert.Equal("]", cache.QuoteSuffix);
         }
+
+        [Fact]
+        public void ContainsKey()
+        {
+            {
+                var result = "sqlserver".ContainsKey();
+                Assert.True(result);
+            }
+
+            {
+                var result = "NotExistDb".ContainsKey();
+                Assert.False(result);
+            }
+        }
     }
 }
