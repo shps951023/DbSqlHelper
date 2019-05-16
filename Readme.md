@@ -2,6 +2,7 @@
 ![](https://img.shields.io/nuget/dt/DbSqlHelper.svg)
 
 ---
+
 ### Features
 
 1. DbSqlHelper can be used with other third-party package like Dapper easily
@@ -74,6 +75,8 @@ using (var oracleCn = "OracleDb".GetConnection())
 ```
 
 #### SQL Format For ParameterPrefix,QuotePrefix,QuoteSuffix
+- Automatically give ParameterPrefix, QuotePrefix,QuoteSuffix values as per the database to resolve the SQL dialect problem of different databases
+- {0} = ParameterPrefix , {1} = QuotePrefix , {2} = QuoteSuffix
 ```C#
 var sql = Db.SqlFormat("select * from {1}orders{2} where id = {0}id");
 //if db is sqlserver
@@ -102,31 +105,6 @@ Assert.Equal(DBConnectionType.SqlServer, result);
 ----
 
 ### Extension
-
-<!--
-#### CommandExtension
-
-1. EF SqlQuery Index Parameter Style (@p0,@p1...)  
-> this is faster than Dapper Style because it doesn't use Reflection
-```C#
-using (var cn = Db.GetConnection())
-using (var command = cn.CreateCommand("select @p0 + @p1", 1, 2))
-{
-    var result = command.ExecuteScalar();
-    Assert.Equal(3, result);
-}
-```
-
-2. Dapper Style
-```C#
-using (var cn = Db.GetConnection())
-using (var command = cn.CreateCommand("select @val1 + @val2", new { val1=5,val2=10 }))
-{
-    var result = command.ExecuteScalar();
-    Assert.Equal(15, result);
-}
-```
--->
 
 #### ParameterExtension
 1.Builder Style    
@@ -176,5 +154,3 @@ using (var cn = Db.GetConnection())
     Assert.Equal(1, result);
 }
 ```
-
-
