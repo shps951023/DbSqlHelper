@@ -27,7 +27,18 @@ namespace DbSqlHelper
         public static IDbCommand AddParams(this IDbCommand cmd, params object[] parameters)
         {
             foreach (var item in parameters)
-                AddParam(cmd, item);
+            {
+                if (item is IDbDataParameter)
+                    cmd.Parameters.Add(item as IDbDataParameter);
+                else
+                    AddParam(cmd, item);
+            }
+            return cmd;
+        }
+
+        public static IDbCommand AddParam(this IDbCommand cmd, IDbDataParameter parameter)
+        {
+            cmd.Parameters.Add(parameter);
             return cmd;
         }
 
