@@ -24,12 +24,22 @@ namespace DbSqlHelperTest
                 var sql = "sqlserver".SqlFormat("select * from {1}orders{2} where id = {0}id");
                 Assert.Equal("select * from [orders] where id = @id", sql);
             }
+
+            //SqlSimpleFormat
+            {
+                var sql = "select * from orders where id = @id".SqlSimpleFormat();
+                //if db is sqlserver
+                Assert.Equal("select * from orders where id = @id", sql);
+
+                //if db is oracle
+                //Assert.Equal("select * from orders where id = :id", sql);
+            }
         }
 
         [Fact]
         public void SqlQuery()
         {
-            var result = Db.SqlQuery(connection => connection.QueryFirst<string>("select 'Hello Github'"));
+            var result = Db.SqlQuery(connection => connection.CreateCommand("select 'Hello Github'").ExecuteScalar());
             Assert.Equal("Hello Github", result);
         }
     }

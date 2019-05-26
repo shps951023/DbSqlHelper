@@ -26,15 +26,12 @@ namespace DbSqlHelperTest
         {
             using (var cn = Db.GetConnection())
             {
-                var sql = "select 1 id,'test' val,null nullCol";
-
-                var result = cn.GetDbColumnsSchema(sql).ToArray();
+                var result = cn.GetDbColumnsSchema("select 1 id,'hello github' val").ToArray();
 
                 Assert.Equal("id", result[0].ColumnName);
+                Assert.Equal("val", result[1].ColumnName);
                 Assert.Equal(typeof(int), result[0].DataType);
                 Assert.Equal(typeof(string), result[1].DataType);
-
-                Assert.True(result[2].AllowDBNull);
             }
         }
     }

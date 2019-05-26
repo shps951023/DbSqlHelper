@@ -9,7 +9,7 @@
 2. Just addConnection one time then you can get it any where,and it support mutiple connection type.
 3. The simplest way to SQL Execute
 4. Support mutiple RDBMS (SqlServer,Oracle,MySQL..)
-5. Support `net40;net45;net451;net46;netstandard2.0;` framework
+5. Support `.net 4.0 above` and `.netstandard2.0` framework
 
 ---
 ### Online Demo
@@ -74,6 +74,20 @@ using (var oracleCn = "OracleDb".GetConnection())
 }
 ```
 
+#### Db.SqlQuery
+```C#
+var result = Db.SqlQuery(connection => connection.CreateCommand("select 'Hello Github'").ExecuteScalar());
+Assert.Equal("Hello Github", result);
+```
+
+or
+```C#
+var result = Db.SqlQuery(connection => {
+    //your logic
+    return data;
+});
+```
+
 #### SQL Format For ParameterPrefix,QuotePrefix,QuoteSuffix
 - Automatically give ParameterPrefix, QuotePrefix,QuoteSuffix values as per the database to resolve the SQL dialect problem of different databases
 - {0} = ParameterPrefix , {1} = QuotePrefix , {2} = QuoteSuffix
@@ -85,6 +99,33 @@ Assert.Equal("select * from [orders] where id = @id", sql);
 //if db is oracle
 Assert.Equal("select * from \"orders\" where id = :id", sql); 
 ```
+
+#### Simple Sql Format
+- example : oracle connection replace `@` by `:` 
+```C#
+var sql = "select * from orders where id = @id".SqlSimpleFormat();
+//if db is sqlserver
+Assert.Equal("select * from orders where id = @id", sql);
+
+//if db is oracle
+//Assert.Equal("select * from orders where id = :id", sql);
+```
+
+#### GetDbColumnsSchema
+```C#
+using (var cn = Db.GetConnection())
+{
+    var result = cn.GetDbColumnsSchema("select 1 id,'hello github' val").ToArray();
+
+    Assert.Equal("id", result[0].ColumnName);
+    Assert.Equal("val", result[1].ColumnName);
+    Assert.Equal(typeof(int), result[0].DataType);
+    Assert.Equal(typeof(string), result[1].DataType);
+}
+```
+
+
+---
 
 #### GetDbConnection Cache Model(Get Connection ParameterPrefix,QuotePrefix,QuoteSuffix)
 ```C#

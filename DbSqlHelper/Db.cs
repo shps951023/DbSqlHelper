@@ -191,7 +191,7 @@ namespace DbSqlHelper
         }
 
         /// <summary>
-        /// oracle connection replace `@` by `:` 
+        /// example : oracle connection replace `@` by `:` 
         /// </summary>
         public static string SqlSimpleFormat(this string sql)
         {

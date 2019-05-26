@@ -9,10 +9,8 @@ namespace DbSqlHelperTest
         {
             var connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Integrated Security=SSPI;Initial Catalog=master;";
             Db.AddConnection<SqlConnection>(connectionString);
-            Db.AddConnection(typeof(SqlConnection), connectionString);
 
             "sqlserver".AddConnection<SqlConnection>(connectionString);
-            //"oracle".AddConnection<SqlConnection>(connectionString);
         }
     }
 }
