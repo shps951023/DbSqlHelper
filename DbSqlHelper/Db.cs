@@ -5,15 +5,6 @@ using System.Linq.Expressions;
 
 namespace DbSqlHelper
 {
-    public class DbCache
-    {
-        internal Func<IDbConnection> ConnectionFunc { get; set; }
-        internal Func<IDbDataParameter> ParameterFunc { get; set; }
-        public string ParameterPrefix { get; set; } = "@";
-        public string QuotePrefix { get; set; } = "";
-        public string QuoteSuffix { get; set; } = "";
-        public DBConnectionType DBConnectionType { get; set; } = DBConnectionType.Unknown;
-    }
 
     //Open Api
     public static partial class Db
@@ -26,6 +17,9 @@ namespace DbSqlHelper
         /// </summary>
         public static bool ContainsKey(this string key) => _DbCache.ContainsKey(key);
 
+        /// <summary>
+        /// Add Default Connection Like "".AddConnection(connectionString)
+        /// </summary>
         public static string AddConnection<TDbType>(string connectionString) => "".AddConnectionImpl(typeof(TDbType), connectionString);
 
         public static string AddConnection<TDbType>(this string key, string connectionString) => key.AddConnectionImpl(typeof(TDbType), connectionString);
@@ -44,6 +38,7 @@ namespace DbSqlHelper
         {
             var model = new DbCache();
             _DbCache[key] = model;
+            model.Key = key;
 
             //Connection Cache
             {
@@ -75,6 +70,7 @@ namespace DbSqlHelper
 
                 //DbConnectionType
                 model.DBConnectionType = cn.GetDbConnectionType();
+                model.Type = connectionType;
 
                 //ParameterPrefix QuotePrefix QuoteSuffix
                 switch (cn.GetDbConnectionType())
@@ -136,6 +132,18 @@ namespace DbSqlHelper
         public static DbCache GetDbCache() => _DbCache[""];
     }
 
+    //Connection Query
+    public static partial class Db
+    {
+        public static T SqlQuery<T>(Func<IDbConnection,T> func)
+        {
+            using (var cn = Db.GetConnection())
+            {
+                return func(cn);
+            }
+        }
+    }
+
     //Parameter
     public static partial class Db
     {
@@ -162,7 +170,7 @@ namespace DbSqlHelper
         /// </summary>
         /// <param name="key">DataBase Cache Key</param>
         /// <param name="sql">Format Sql</param>
-        public static string SqlFormat(string sql) => "".SqlFormat(sql);
+        public static string SqlFormat(this string sql) => "".SqlFormat(sql);
 
         /// <summary>
         /// {0} = ParameterPrefix , {1} = QuotePrefix , {2} = QuoteSuffix , 
@@ -179,6 +187,17 @@ namespace DbSqlHelper
                 .Replace("{1}", cache.QuotePrefix)
                 .Replace("{2}", cache.QuoteSuffix)
                 ;
+            return sql;
+        }
+
+        /// <summary>
+        /// oracle connection replace `@` by `:` 
+        /// </summary>
+        public static string SqlSimpleFormat(this string sql)
+        {
+            var cache = "".GetDbCache();
+            if(cache.DBConnectionType==DBConnectionType.Oracle)
+                sql = sql.Replace("@", cache.ParameterPrefix);
             return sql;
         }
     }
