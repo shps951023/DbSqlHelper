@@ -14,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution items", "Solution 
 		Readme.md = Readme.md
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ITWeiHan.Utilities", "..\ITWeiHan.Utilities\ITWeiHan.Utilities\ITWeiHan.Utilities.csproj", "{A6BF4FC0-ADFD-41B9-8587-18C390D5F9CB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,6 +30,10 @@ Global
 		{1549124C-24A8-4E6F-8D67-310650DCC42C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1549124C-24A8-4E6F-8D67-310650DCC42C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1549124C-24A8-4E6F-8D67-310650DCC42C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6BF4FC0-ADFD-41B9-8587-18C390D5F9CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6BF4FC0-ADFD-41B9-8587-18C390D5F9CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6BF4FC0-ADFD-41B9-8587-18C390D5F9CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6BF4FC0-ADFD-41B9-8587-18C390D5F9CB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
