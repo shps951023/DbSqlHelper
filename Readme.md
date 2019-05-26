@@ -78,7 +78,7 @@ using (var oracleCn = "OracleDb".GetConnection())
 - Automatically give ParameterPrefix, QuotePrefix,QuoteSuffix values as per the database to resolve the SQL dialect problem of different databases
 - {0} = ParameterPrefix , {1} = QuotePrefix , {2} = QuoteSuffix
 ```C#
-var sql = Db.SqlFormat("select * from {1}orders{2} where id = {0}id");
+var sql = "select * from {1}orders{2} where id = {0}id".SqlFormat();
 //if db is sqlserver
 Assert.Equal("select * from [orders] where id = @id", sql); 
 
