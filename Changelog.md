@@ -1,6 +1,6 @@
 #### Version 0.9.7
 - [X] Add `ContainsKey` method to determines whether the connection cache contains the specified key.
-- [X] Add `OpenCloseConnection method`
+- [X] Add `OpenCloseConnection` method
 - [X] Add `Db.SqlQuery` , example with dapper:
 ```C#
 var result = Db.SqlQuery(connection => connection.QueryFirst<string>("select 'Hello Github'"));
